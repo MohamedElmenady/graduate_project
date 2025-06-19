@@ -5,31 +5,24 @@ import 'package:graduate_project/core/healpers/spacing.dart';
 import 'package:graduate_project/core/routing/routes.dart';
 import 'package:graduate_project/core/theming/colors.dart';
 import 'package:graduate_project/core/theming/font_weight_helper.dart';
-import 'package:graduate_project/feature/login/ui/login_screen.dart';
 import 'package:graduate_project/feature/sign_up/logic/sign_up_state.dart';
+import 'package:graduate_project/feature/sign_up/ui/widgets/text_forms.dart';
 
 import '../logic/sign_up_cubit.dart';
 
 // ignore: must_be_immutable
 class SignupScreen extends StatelessWidget {
-  final namecontrol = TextEditingController();
-  final emailcontrol = TextEditingController();
-  final phonecontrol = TextEditingController();
-  final passcontrol = TextEditingController();
   final fromkey = GlobalKey<FormState>();
-  bool isloding = false;
 
   SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<SignupCubit>(context);
     return BlocConsumer<SignupCubit, SignUpState>(
       listener: (context, state) {
         if (state is SignUpSuccess) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
+          context.pushReplacementNamed(Routes.loginScreen);
         } else if (state is SignUpFailure) {
           showDialog(
             context: context,
@@ -60,14 +53,8 @@ class SignupScreen extends StatelessWidget {
                         color: ColorsManager.mainBlue),
                   ),
                   verticalSpace(20),
-                  _textfield(hint: 'username', controller: namecontrol),
-                  verticalSpace(20),
-                  _textfield(hint: 'email', controller: emailcontrol),
-                  verticalSpace(20),
-                  _textfield(hint: 'phone', controller: phonecontrol),
-                  verticalSpace(20),
-                  _textfield(
-                      hint: 'passWord', controller: passcontrol, isSecur: true),
+                  // ignore: prefer_const_constructors
+                  TextForms(),
                   verticalSpace(20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -75,11 +62,11 @@ class SignupScreen extends StatelessWidget {
                       ElevatedButton(
                           onPressed: () {
                             if (fromkey.currentState!.validate()) {
-                              BlocProvider.of<SignupCubit>(context).register(
-                                  name: namecontrol.text,
-                                  email: emailcontrol.text,
-                                  phone: phonecontrol.text,
-                                  pass: passcontrol.text);
+                              cubit.register(
+                                  name: cubit.namecontrol.text,
+                                  email: cubit.emailcontrol.text,
+                                  phone: cubit.phonecontrol.text,
+                                  pass: cubit.passcontrol.text);
                             }
                           },
                           child: state is SignUpLoading
@@ -110,27 +97,6 @@ class SignupScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _textfield(
-      {bool? isSecur,
-      required String hint,
-      required TextEditingController controller}) {
-    return TextFormField(
-      controller: controller,
-      validator: (data) {
-        if (controller.text.isEmpty) {
-          return '$hint must not be empty';
-        } else {
-          return null;
-        }
-      },
-      obscureText: isSecur ?? false,
-      decoration: InputDecoration(
-        hintText: hint,
-        border: const OutlineInputBorder(),
-      ),
     );
   }
 }

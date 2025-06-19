@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:graduate_project/core/healpers/constants.dart';
+import 'package:graduate_project/core/healpers/constants.dart';
+import 'package:graduate_project/core/healpers/shared.dart';
 import 'package:graduate_project/feature/login/logic/login_state.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,26 +15,33 @@ class LoginCubit extends Cubit<LoginState> {
     emit(SuccessState());
   }
 
+  final emailcontrol = TextEditingController();
+  final passcontrol = TextEditingController();
   void login({required String email, required String pass}) async {
-    //emit(LodingLogin());
     try {
       emit(LodingLogin());
-      final response = await http.post(
-        Uri.parse("http://10.0.2.2:7260/api/Auth/login"),
-        body: {
-          "email": email,
-          "password": pass,
-        },
-      );
-      final responseBody = jsonDecode(response.body);
-      if (responseBody['status'] == true) {
-        emit(SuccessLogin());
+      http.Response response = await http.post(Uri.parse(baseUrlLogin),
+          body: jsonEncode({
+            "email": email,
+            "password": pass,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          });
+      var responseBody = jsonDecode(response.body);
+      // ignore: avoid_print
+      print("////////////$responseBody //////////////////");
+      if (response.statusCode == 200) {
+        if (responseBody['status'] == true) {
+          await CashNetwork.set(
+              key: 'token', value: responseBody['data']['token']);
+          emit(SuccessLogin());
+        }
       } else {
         emit(FailueirLogin(message: responseBody['message']));
       }
     } catch (e) {
-      emit(FailueirLogin(message: "خطأ في الاتصال بالسيرفر: $e"));
-      print(e);
+      emit(FailueirLogin(message: e.toString()));
     }
   }
 }

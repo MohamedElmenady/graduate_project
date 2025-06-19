@@ -11,3 +11,5 @@ class SignUpFailure extends SignUpState {
 
   SignUpFailure({required this.message});
 }
+
+class SuccessState extends SignUpState {}

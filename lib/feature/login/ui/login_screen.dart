@@ -13,54 +13,52 @@ import 'package:graduate_project/feature/login/ui/widgits/dont_have_account_text
 import 'package:graduate_project/feature/login/ui/widgits/terms_and_conditions_text.dart';
 
 class LoginScreen extends StatelessWidget {
-  final emailcontrol = TextEditingController();
-  final passcontrol = TextEditingController();
   final fromkey = GlobalKey<FormState>();
+
   LoginScreen({super.key});
 
-  // bool isObscureText = true;
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<LoginCubit>(context);
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 30.h),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Welcome Back',
-                  style: TextStyles.font24BlueBold,
-                ),
-                verticalSpace(8),
-                Text(
-                  'We\'re excited to have you back, can\'t wait to see what you\'ve been up to since you last logged in.',
-                  style: TextStyles.font14GrayRegular,
-                ),
-                verticalSpace(36),
-                BlocConsumer<LoginCubit, LoginState>(
-                  listener: (context, state) {
-                    if (state is SuccessLogin) {
-                      context.pushReplacementNamed(Routes.homeScreen);
-                    } else if (state is FailueirLogin) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          content: Text(
-                            state.message,
-                            style: const TextStyle(color: Colors.white),
+    return Form(
+      key: fromkey,
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 30.h),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Welcome Back',
+                    style: TextStyles.font24BlueBold,
+                  ),
+                  verticalSpace(8),
+                  Text(
+                    'We\'re excited to have you back, can\'t wait to see what you\'ve been up to since you last logged in.',
+                    style: TextStyles.font14GrayRegular,
+                  ),
+                  verticalSpace(36),
+                  BlocConsumer<LoginCubit, LoginState>(
+                    listener: (context, state) {
+                      if (state is SuccessLogin) {
+                        context.pushReplacementNamed(Routes.homeScreen);
+                      } else if (state is FailueirLogin) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text(
+                              state.message,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.red,
                           ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return Form(
-                      key: fromkey,
-                      child: Column(
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return Column(
                         children: [
                           AppTextFormField(
                             hintText: 'Email',
@@ -71,11 +69,11 @@ class LoginScreen extends StatelessWidget {
                                 return 'Please enter a valid email';
                               }
                             },
-                            controller: emailcontrol,
+                            controller: cubit.emailcontrol,
                           ),
                           verticalSpace(18),
                           AppTextFormField(
-                            controller: passcontrol,
+                            controller: cubit.passcontrol,
                             hintText: 'Password',
                             isObscureText: cubit.isObscureText,
                             suffixIcon: GestureDetector(
@@ -107,8 +105,8 @@ class LoginScreen extends StatelessWidget {
                               onPressed: () {
                                 if (fromkey.currentState!.validate()) {
                                   cubit.login(
-                                      email: emailcontrol.text,
-                                      pass: passcontrol.text);
+                                      email: cubit.emailcontrol.text,
+                                      pass: cubit.passcontrol.text);
                                 }
                               },
                               child: state is LodingLogin
@@ -122,11 +120,11 @@ class LoginScreen extends StatelessWidget {
                           verticalSpace(60),
                           const DontHaveAccountText(),
                         ],
-                      ),
-                    );
-                  },
-                ),
-              ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
