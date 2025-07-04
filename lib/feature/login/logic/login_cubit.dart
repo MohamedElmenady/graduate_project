@@ -17,6 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   final emailcontrol = TextEditingController();
   final passcontrol = TextEditingController();
+
   void login({required String email, required String pass}) async {
     try {
       emit(LodingLogin());
@@ -33,8 +34,10 @@ class LoginCubit extends Cubit<LoginState> {
       print("////////////$responseBody //////////////////");
       if (response.statusCode == 200) {
         if (responseBody['status'] == true) {
-          await CashNetwork.set(
-              key: 'token', value: responseBody['data']['token']);
+          String token1 = responseBody['data']['token'];
+          await CashNetwork.set(key: 'token', value: token1);
+          token = token1;
+          await CashNetwork.get(key: 'token');
           emit(SuccessLogin());
         }
       } else {

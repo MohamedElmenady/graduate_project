@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduate_project/core/routing/routes.dart';
-import 'package:graduate_project/feature/home/home_screen.dart';
+import 'package:graduate_project/feature/doctor/doctorScreen.dart';
+//import 'package:graduate_project/feature/home/home_screen.dart';
+import 'package:graduate_project/feature/layout/layout.dart';
+import 'package:graduate_project/feature/layout/logic/layoutCubit.dart';
 import 'package:graduate_project/feature/login/ui/login_screen.dart';
 import 'package:graduate_project/feature/onboarding/onboarding_screen.dart';
 import 'package:graduate_project/feature/sign_up/ui/sign_up_screen.dart';
@@ -34,10 +37,19 @@ class AppRouter {
             child: SignupScreen(),
           ),
         );
-      case Routes.homeScreen:
+
+      case Routes.layoutScreen:
         return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
+          builder: (_) => BlocProvider(
+            create: (context) => LayoutCubit(),
+            child: const LayoutScreen(),
+          ),
         );
+      case Routes.doctorScreen:
+        return MaterialPageRoute(
+          builder: (_) => const DoctorScreen(),
+        );
+
       default:
         return null;
     }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:graduate_project/core/healpers/constants.dart';
 import 'package:graduate_project/core/routing/app_router.dart';
 import 'package:graduate_project/core/routing/routes.dart';
 import 'package:graduate_project/core/theming/colors.dart';
@@ -21,9 +20,7 @@ class DocApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.white,
           ),
           debugShowCheckedModeBanner: false,
-          initialRoute: token != null && token != ""
-              ? Routes.homeScreen
-              : Routes.onBoardingScreen,
+          initialRoute: Routes.loginScreen,
           onGenerateRoute: appRouter.generateRoute,
         ));
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graduate_project/core/healpers/app_regex.dart';
+import 'package:graduate_project/core/healpers/constants.dart';
 import 'package:graduate_project/core/healpers/extentions.dart';
 import 'package:graduate_project/core/healpers/spacing.dart';
 import 'package:graduate_project/core/routing/routes.dart';
@@ -43,7 +44,9 @@ class LoginScreen extends StatelessWidget {
                   BlocConsumer<LoginCubit, LoginState>(
                     listener: (context, state) {
                       if (state is SuccessLogin) {
-                        context.pushReplacementNamed(Routes.homeScreen);
+                        context.pushReplacementNamed(userType == "User"
+                            ? Routes.layoutScreen
+                            : Routes.doctorScreen);
                       } else if (state is FailueirLogin) {
                         showDialog(
                           context: context,
