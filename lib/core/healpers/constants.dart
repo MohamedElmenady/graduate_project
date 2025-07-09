@@ -12,6 +12,11 @@ const String baseUrlSpeciality = 'http://192.168.1.5:5237/api/Specialization';
 const String baseUrlHomePage = 'http://192.168.1.5:5237/api/HomePage';
 const String baseUrlBooking = 'http://192.168.1.5:5237/api/Appointment/book';
 const String baseUrlPayment = 'http://192.168.1.5:5237/api/payment';
+const String baseUrlEvent =
+    'http://192.168.1.5:5237/api/Appointment/my?Status=upcoming';
+const String baseUrl = 'http://192.168.1.5:5237/api';
+const String baseUrlConfirmEmail =
+    'http://192.168.1.5:5237/api/Auth/confirm-email';
 //String name=UserMod;
 String? token;
 String? name;

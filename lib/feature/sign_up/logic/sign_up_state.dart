@@ -13,3 +13,12 @@ class SignUpFailure extends SignUpState {
 }
 
 class SuccessState extends SignUpState {}
+
+class ConfirmEmailLoading extends SignUpState {}
+
+class ConfirmEmailSuccess extends SignUpState {}
+
+class ConfirmEmailError extends SignUpState {
+  final String message;
+  ConfirmEmailError(this.message);
+}

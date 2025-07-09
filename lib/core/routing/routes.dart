@@ -6,5 +6,6 @@ class Routes {
   static const String profileScreen = '/profileScreen';
   static const String layoutScreen = '/layoutScreen';
   static const String editProfileScreen = '/editProfileScreen';
-  static const String doctorScreen = '/doctorScreen';
+  static const String tapBarScreen = '/tapBarScreen';
+  //static const String emailConfirmationScreen = '/emailConfirmationScreen';
 }

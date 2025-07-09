@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduate_project/core/healpers/app_regex.dart';
 import 'package:graduate_project/core/healpers/extentions.dart';
 import 'package:graduate_project/core/healpers/spacing.dart';
 import 'package:graduate_project/core/routing/routes.dart';
 import 'package:graduate_project/core/theming/colors.dart';
 import 'package:graduate_project/core/theming/font_weight_helper.dart';
+import 'package:graduate_project/core/widgets/app_text_form_field.dart';
+import 'package:graduate_project/feature/sign_up/confirmEmailScreen.dart';
 import 'package:graduate_project/feature/sign_up/logic/sign_up_state.dart';
-import 'package:graduate_project/feature/sign_up/ui/widgets/text_forms.dart';
 
 import '../logic/sign_up_cubit.dart';
 
@@ -22,7 +24,15 @@ class SignupScreen extends StatelessWidget {
     return BlocConsumer<SignupCubit, SignUpState>(
       listener: (context, state) {
         if (state is SignUpSuccess) {
-          context.pushReplacementNamed(Routes.loginScreen);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: context.read<SignupCubit>(),
+                child: ConfirmEmailScreen(email: cubit.emailcontrol.text),
+              ),
+            ),
+          );
         } else if (state is SignUpFailure) {
           showDialog(
             context: context,
@@ -54,7 +64,58 @@ class SignupScreen extends StatelessWidget {
                   ),
                   verticalSpace(20),
                   // ignore: prefer_const_constructors
-                  TextForms(),
+                  AppTextFormField(
+                    hintText: 'username',
+                    controller: cubit.namecontrol,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a valid username';
+                      }
+                    },
+                  ),
+                  verticalSpace(20),
+                  AppTextFormField(
+                    hintText: 'email',
+                    controller: cubit.emailcontrol,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !AppRegex.isEmailValid(value)) {
+                        return 'Please enter a valid email';
+                      }
+                    },
+                  ),
+                  verticalSpace(20),
+                  AppTextFormField(
+                    hintText: 'phone',
+                    controller: cubit.phonecontrol,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a valid phone number';
+                      }
+                    },
+                  ),
+                  verticalSpace(20),
+                  AppTextFormField(
+                    controller: cubit.passcontrol,
+                    hintText: 'Password',
+                    isObscureText: cubit.isObscureText,
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        cubit.vision();
+                      },
+                      child: Icon(
+                        cubit.isObscureText
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a valid password';
+                      }
+                    },
+                  ),
                   verticalSpace(20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -63,10 +124,10 @@ class SignupScreen extends StatelessWidget {
                           onPressed: () {
                             if (fromkey.currentState!.validate()) {
                               cubit.register(
-                                  name: cubit.namecontrol.text,
-                                  email: cubit.emailcontrol.text,
-                                  phone: cubit.phonecontrol.text,
-                                  pass: cubit.passcontrol.text);
+                                  name: cubit.namecontrol.text.trim(),
+                                  email: cubit.emailcontrol.text.trim(),
+                                  phone: cubit.phonecontrol.text.trim(),
+                                  pass: cubit.passcontrol.text.trim());
                             }
                           },
                           child: state is SignUpLoading

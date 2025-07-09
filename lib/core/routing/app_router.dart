@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduate_project/core/routing/routes.dart';
-import 'package:graduate_project/feature/doctor/doctorScreen.dart';
+import 'package:graduate_project/feature/doctor/tapBarScreen.dart';
 //import 'package:graduate_project/feature/home/home_screen.dart';
 import 'package:graduate_project/feature/layout/layout.dart';
 import 'package:graduate_project/feature/layout/logic/layoutCubit.dart';
@@ -45,9 +45,9 @@ class AppRouter {
             child: const LayoutScreen(),
           ),
         );
-      case Routes.doctorScreen:
+      case Routes.tapBarScreen:
         return MaterialPageRoute(
-          builder: (_) => const DoctorScreen(),
+          builder: (_) => const TapBarScreen(),
         );
 
       default:

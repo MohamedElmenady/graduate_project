@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graduate_project/core/healpers/app_regex.dart';
 import 'package:graduate_project/core/healpers/spacing.dart';
 import 'package:graduate_project/core/widgets/app_text_form_field.dart';
 import 'package:graduate_project/feature/sign_up/logic/sign_up_cubit.dart';
@@ -26,7 +25,8 @@ class TextForms extends StatelessWidget {
         hintText: 'email',
         controller: cubit.emailcontrol,
         validator: (value) {
-          if (value == null || value.isEmpty || !AppRegex.isEmailValid(value)) {
+          if (value == null ||
+              value.isEmpty /*|| !AppRegex.isEmailValid(value)*/) {
             return 'Please enter a valid email';
           }
         },

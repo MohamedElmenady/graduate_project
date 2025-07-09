@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                       if (state is SuccessLogin) {
                         context.pushReplacementNamed(userType == "User"
                             ? Routes.layoutScreen
-                            : Routes.doctorScreen);
+                            : Routes.tapBarScreen);
                       } else if (state is FailueirLogin) {
                         showDialog(
                           context: context,

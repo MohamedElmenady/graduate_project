@@ -67,11 +67,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter amount';
+                        return 'Amount must be exactly 100 EGP';
                       }
                       final amount = double.tryParse(value);
                       if (amount == null) {
-                        return 'Invalid amount';
+                        return 'Amount must be exactly 100 EGP';
                       } else if (amount != 100) {
                         return 'Amount must be exactly 100 EGP';
                       }

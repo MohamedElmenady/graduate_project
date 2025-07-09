@@ -26,7 +26,7 @@ class LayoutScreen extends StatelessWidget {
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.medical_services), label: 'Services'),
-              /* BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),*/
+              BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.person), label: 'Profile'),
             ],

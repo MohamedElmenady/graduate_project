@@ -18,33 +18,86 @@ class SignupCubit extends Cubit<SignUpState> {
   final emailcontrol = TextEditingController();
   final phonecontrol = TextEditingController();
   final passcontrol = TextEditingController();
-  void register(
-      {required String name,
-      required String email,
-      required String phone,
-      required String pass}) async {
+  final codeController = TextEditingController();
+  void register({
+    required String name,
+    required String email,
+    required String phone,
+    required String pass,
+  }) async {
     try {
       emit(SignUpLoading());
-      http.Response response = await http.post(
+
+      final response = await http.post(
         Uri.parse(baseUrlRegister),
         body: jsonEncode({
           "fullName": name,
           "email": email,
           "phoneNumber": phone,
-          "password": pass
+          "password": pass,
         }),
         headers: {'Content-Type': 'application/json'},
       );
-      var responseBody = jsonDecode(response.body);
-      // ignore: avoid_print
-      print("/////////////////////$responseBody///////////////////////");
-      if (responseBody['status'] == true) {
-        emit(SignUpSuccess());
+
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.body.isEmpty) {
+        emit(SignUpFailure(message: "Empty response from server"));
+        return;
+      }
+
+      final responseBody = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseBody['status'] == true) {
+          emit(SignUpSuccess());
+        } else {
+          emit(SignUpFailure(
+              message: responseBody['message'] ?? 'Unknown error'));
+        }
       } else {
-        emit(SignUpFailure(message: responseBody['message']));
+        emit(SignUpFailure(
+            message: responseBody['message'] ?? 'Something went wrong'));
       }
     } catch (e) {
       emit(SignUpFailure(message: e.toString()));
+    }
+  }
+
+  /* void clearFields() {
+    namecontrol.clear();
+    emailcontrol.clear();
+    phonecontrol.clear();
+    passcontrol.clear();
+  }*/
+
+  Future<void> confirmEmail(
+      {required String code, required String email}) async {
+    print(email);
+    emit(ConfirmEmailLoading());
+    final url = Uri.parse(baseUrlConfirmEmail);
+    final body = {
+      'email': email,
+      'code': code,
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode(body),
+        headers: {'Content-Type': 'application/json'},
+      );
+      var responseBody = jsonDecode(response.body);
+      print(responseBody);
+      if (response.statusCode == 200) {
+        emit(ConfirmEmailSuccess());
+        //clearFields();
+      } else {
+        emit(ConfirmEmailError("Invalid code or email"));
+      }
+    } catch (e) {
+      emit(ConfirmEmailError(e.toString()));
     }
   }
 }
